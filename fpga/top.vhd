@@ -30,10 +30,10 @@ entity HdmilightTop is
 	(
 		ADV_P : in STD_LOGIC_VECTOR(23 downto 0);
 		ADV_LLC : in STD_LOGIC;
-		ADV_AP : in STD_LOGIC;
-		ADV_SCLK : in STD_LOGIC;
-		ADV_LRCLK : in STD_LOGIC;
-		ADV_MCLK : in STD_LOGIC;
+		--ADV_AP : in STD_LOGIC;
+		--ADV_SCLK : in STD_LOGIC;
+		--ADV_LRCLK : in STD_LOGIC;
+		--ADV_MCLK : in STD_LOGIC;
 		ADV_SCL : inout STD_LOGIC;
 		ADV_SDA : inout STD_LOGIC;
 		ADV_INT1 : in STD_LOGIC;
