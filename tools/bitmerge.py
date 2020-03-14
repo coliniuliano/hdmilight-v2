@@ -12,6 +12,8 @@ def autoint(x):
 flash_size = 8*1024*1024/8
 #Standard size of bitstream for a Spartan 6 LX9
 bit_size = 340*1024
+#Colin 2020-03-14: Standard size of a bitstream for a Spartan 6 LX16
+bit_size = 460*1024
 
 parser = argparse.ArgumentParser(description='Concatenates an FPGA .bit file and a user supplied binary file together.\nProduces a valid .bit file that can be written to a platform flash using\nstandard tools.')
 parser.add_argument('ifile', type=argparse.FileType('rb'), help='source FPGA .bit file')

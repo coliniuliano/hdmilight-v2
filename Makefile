@@ -1,4 +1,4 @@
-DATA2MEM = /opt/Xilinx/14.4/ISE_DS/ISE/bin/lin64/data2mem
+DATA2MEM = "/mnt/c/Xilinx/14.6/ISE_DS/ISE/bin/nt64/data2mem.exe"
 
 all:
 	make -C tools

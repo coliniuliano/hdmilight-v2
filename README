@@ -24,3 +24,17 @@ How to use:
 10) Connect HDMI source to receiver board
 11) It should now be working.
 
+Colin Notes
+
+- Enable WSL, Install Ubuntu
+   - sudo apt update && sudo apt upgrade
+   - sudo apt install make
+   - sudo apt install avr-gcc
+   - sudo apt install gcc
+   - sudo apt-get install avr-libc
+   - sudo apt install python (prob should use 3)
+   - sudo apt install python-pip
+   - python -m pip install --upgrade pip setuptools wheel
+   - pip install numpy
+   - cd <project directory>
+   - make
