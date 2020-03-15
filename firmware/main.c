@@ -34,7 +34,10 @@
 // If this line is commented out, the ADV7611 will not be started
 // at power on and HDMI handshaking will not occur, in which case "R"
 // needs to be run from the serial console to start the ADV7611
-#define AUTO_INITIALIZATION
+
+// COLIN 2020-03-15 Disabled this while the ADV board is not connected to get a Serial prompt
+// to ensure that the CPU is actually running
+//#define AUTO_INITIALIZATION
 
 // Uncomment to enable power on/off via physical switch.
 // Requires a pull-up resistor and switch to be added.
