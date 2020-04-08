@@ -10,13 +10,8 @@
 ##
 ##################################################################################
 
-## Prohibit the automatic placement of pins that are connected to VCC or GND for configuration.
-#?CONFIG PROHIBIT=P144;
-#?CONFIG PROHIBIT=P69;
-#?CONFIG PROHIBIT=P60;
-
-# Crystal Clock - use 32MHz onboard oscillator
-NET "CLK" LOC = "A10" | IOSTANDARD = LVTTL | PERIOD = 31.25ns;
+# Crystal Clock - use 50MHz onboard oscillator
+NET "CLK" LOC = "A10" | IOSTANDARD = LVTTL | PERIOD = 20ns;
 
 # RS232
 NET "RX"  LOC = "M10" | IOSTANDARD = LVTTL | DRIVE=8 | SLEW=FAST;
@@ -63,8 +58,18 @@ NET "ADV_P<21>" LOC = "J16" | IOSTANDARD = LVCMOS25;
 NET "ADV_P<22>" LOC = "J11" | IOSTANDARD = LVCMOS25;
 NET "ADV_P<23>" LOC = "J12" | IOSTANDARD = LVCMOS25;
 
-NET "OUTPUT<0>" LOC = "E12" | IOSTANDARD = LVTTL | DRIVE = 2 | SLEW = SLOW;
+NET "ADV_P_H<28>" LOC = "K11" | IOSTANDARD = LVCMOS25;
+NET "ADV_P_H<29>" LOC = "K12" | IOSTANDARD = LVCMOS25;
+NET "ADV_P_H<30>" LOC = "M15" | IOSTANDARD = LVCMOS25;
+NET "ADV_P_H<31>" LOC = "M16" | IOSTANDARD = LVCMOS25;
+NET "ADV_P_H<32>" LOC = "N14" | IOSTANDARD = LVCMOS25;
+NET "ADV_P_H<33>" LOC = "N16" | IOSTANDARD = LVCMOS25;
+NET "ADV_P_H<34>" LOC = "M13" | IOSTANDARD = LVCMOS25;
+NET "ADV_P_H<35>" LOC = "M14" | IOSTANDARD = LVCMOS25;
+
+NET "OUTPUT" LOC = "E12" | IOSTANDARD = LVTTL | DRIVE = 2 | SLEW = SLOW;
 # TODO - Colin - Consider multiple outputs
+#NET "OUTPUT<0>" LOC = "E12" | IOSTANDARD = LVTTL | DRIVE = 2 | SLEW = SLOW;
 #?NET "OUTPUT<1>" LOC = "P132" | IOSTANDARD = LVTTL | DRIVE = 2 | SLEW = SLOW;
 #?NET "OUTPUT<2>" LOC = "P133" | IOSTANDARD = LVTTL | DRIVE = 2 | SLEW = SLOW;
 #?NET "OUTPUT<3>" LOC = "P134" | IOSTANDARD = LVTTL | DRIVE = 2 | SLEW = SLOW;

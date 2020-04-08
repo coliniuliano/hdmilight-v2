@@ -458,6 +458,17 @@ void cmdRstAll(uint8_t argc, char** argv)
 	cmdRstDelay(argc, argv);
 }
 
+void cmdColinSetColor(uint8_t argc, char** argv)
+{
+	if(argc != 4)
+		return;
+
+	i2cWrite(0x44, 0xC0, getint(&argv[2]));
+	i2cWrite(0x44, 0xC1, getint(&argv[1]));
+	i2cWrite(0x44, 0xC2, getint(&argv[3]));
+	printf_P(PSTR("OK\n"));
+}
+
 const char cmdBlankUsage[] PROGMEM = "";
 const char cmdGetAreaUsage[] PROGMEM   = "Get Area:    GA index";
 const char cmdSetAreaUsage[] PROGMEM   = "Set Area:    SA index xmin xmax ymin ymax shift output";
@@ -491,6 +502,8 @@ const char cmdGetResultUsage[] PROGMEM = "Get Result:  GR index";
 const char cmdGetStatusUsage[] PROGMEM = "Get Status:  GS";
 const char cmdGetStackUsage[] PROGMEM  = "Get Stack:   GZ";
 const char cmdRstAllUsage[] PROGMEM    = "Rst All:     R";
+
+const char cmdColinSetColorUsage[] PROGMEM = "C Set Color: CC red green blue";
 
 void dmaRead(uint8_t section, uint16_t src, uint16_t dst, uint16_t len)
 {
@@ -553,6 +566,8 @@ int main()
 		{ "SX", cmdSetAddr,   cmdSetAddrUsage   },
 		{ "GZ", cmdGetStack,  cmdGetStackUsage  },
 		{ "R",  cmdRstAll,    cmdRstAllUsage    },
+
+		{ "CC", cmdColinSetColor, cmdColinSetColorUsage },
 	};
 
 	int i;

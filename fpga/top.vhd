@@ -29,6 +29,7 @@ entity HdmilightTop is
 	Port 
 	(
 		ADV_P : in STD_LOGIC_VECTOR(23 downto 0);
+		ADV_P_H : in STD_LOGIC_VECTOR(35 downto 28);
 		ADV_LLC : in STD_LOGIC;
 		--ADV_AP : in STD_LOGIC;
 		--ADV_SCLK : in STD_LOGIC;
@@ -41,7 +42,7 @@ entity HdmilightTop is
 		ADV_HS : in STD_LOGIC;
 		ADV_VS : in STD_LOGIC;
 		ADV_DE : in STD_LOGIC;
-		OUTPUT : out STD_LOGIC_VECTOR(7 downto 0);
+		OUTPUT : out STD_LOGIC;--STD_LOGIC_VECTOR(7 downto 0);
 		RX : in STD_LOGIC;
 		TX : inout STD_LOGIC;
 		CLK : in STD_LOGIC;
@@ -501,9 +502,11 @@ end process;
 process(ADV_LLC)
 begin
 	if(rising_edge(ADV_LLC)) then
-		viddata_r <= ADV_P(23 downto 16);
-		viddata_g <= ADV_P(15 downto  8);
-		viddata_b <= ADV_P( 7 downto  0);
+		-- COLIN - Set for ADV7619 pattern
+		-- 0x98 0x03 = 0x40 (24-bit 4:4:4 SDR Mode 0)
+		viddata_r <= ADV_P_H(35 downto 28);
+		viddata_g <= ADV_P(23 downto 16);
+		viddata_b <= ADV_P(11 downto 4);
 	end if;
 end process;
 
@@ -541,7 +544,7 @@ SRAM_DIN <= MASTER_DOUT;
 SRAM_WE  <= MASTER_WE when MASTER_ADDR(15) = '0' else "00";
 
 ADV_RST <= '1';
-OUTPUT <= driverOutput;
+OUTPUT <= driverOutput(0);
 
 ADV_SCL <= PORTD(7) when DDRD(7) = '1' else 'Z';
 ADV_SDA <= PORTD(6) when DDRD(6) = '1' else 'Z';

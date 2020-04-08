@@ -109,13 +109,18 @@ void writeConfig(const struct ConfigTable* table)
 		unsigned char subaddress = pgm_read_byte(&p->subaddress);
 		unsigned char data = pgm_read_byte(&p->data);
 
-		if(!silent)
+		if(address == 0xFF && subaddress == 0xFF)
 		{
-			printf_P(PSTR("%d %d %d : "), address, subaddress, data);
+			for(uint16_t i = 0; i < 0xFFFF; i++)
+				asm volatile ("nop");
+		}
+		else if(!silent)
+		{
+			printf_P(PSTR("%02x %02x %02x : "), address, subaddress, data);
 			i2c_start();
-			printf_P(PSTR("%s "), i2c_write(address)    ? "ACK" : "NACK");
-			printf_P(PSTR("%s "), i2c_write(subaddress) ? "ACK" : "NACK");
-			printf_P(PSTR("%s\n"), i2c_write(data)      ? "ACK" : "NACK");
+			printf_P(PSTR("%s "), i2c_write(address)    ? "NACK" : "ACK");
+			printf_P(PSTR("%s "), i2c_write(subaddress) ? "NACK" : "ACK");
+			printf_P(PSTR("%s\n"), i2c_write(data)      ? "NACK" : "ACK");
 			i2c_stop();
 		}
 		else
@@ -125,7 +130,10 @@ void writeConfig(const struct ConfigTable* table)
 
 void cmdRstI2C(uint8_t argc, char** argv)
 {
+	/*
 	writeConfig(g_configTablePreEdid);
 	writeEdid(g_edid, sizeof(g_edid));
 	writeConfig(g_configTablePostEdid);
+	*/
+	writeConfig(g_configTableFreeRun);
 }
