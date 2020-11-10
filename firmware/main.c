@@ -101,6 +101,7 @@ void idle()
 		processCecMessage();
 		g_cecMessageLength = 0;
 		sei();
+		printf_P(PSTR("CEC message\n"));
 	}
 
 #ifdef ENABLE_POWER_SWITCH
@@ -458,6 +459,8 @@ void cmdRstAll(uint8_t argc, char** argv)
 	cmdRstDelay(argc, argv);
 }
 
+
+// Colin Diagnostic commands
 void cmdColinSetColor(uint8_t argc, char** argv)
 {
 	if(argc != 4)
@@ -467,6 +470,31 @@ void cmdColinSetColor(uint8_t argc, char** argv)
 	i2cWrite(0x44, 0xC1, getint(&argv[1]));
 	i2cWrite(0x44, 0xC2, getint(&argv[3]));
 	printf_P(PSTR("OK\n"));
+}
+
+void cmdColinGetDiag(uint8_t argc, char** argv)
+{
+	uint8_t cable_detect = i2cRead(0x98, 0x6F);
+	printf_P(PSTR("Cable Detect A: %s\n"), cable_detect & 0x01 ? "true" : "false");
+
+	uint8_t tmds_detect = i2cRead(0x98, 0x6A);
+	printf_P(PSTR("TMDS Detect: %s\n"), tmds_detect & 0x10 ? "true" : "false");
+
+	uint8_t tmds_pll = i2cRead(0x68, 0x04);
+	printf_P(PSTR("TMDS PLL Locked: %s\n"), tmds_pll & 0x02 ? "true" : "false");
+
+	uint8_t tmds_freq = i2cRead(0x68, 0x51);
+	printf_P(PSTR("TMDS Freq: %02x (%u)\n"), tmds_freq, tmds_freq * 2u );
+
+	uint8_t vsde_lock = i2cRead(0x68, 0x07);
+	printf_P(PSTR("DE Regen Locked: %s\n"), vsde_lock & 0x20 ? "true" : "false");
+	printf_P(PSTR("VS Locked: %s\n"), vsde_lock & 0x80 ? "true" : "false");
+
+	uint8_t stdi_valid = i2cRead(0x44, 0xB1);
+	printf_P(PSTR("STDI Valid: %s\n"), stdi_valid  & 0x80 ? "true" : "false");
+
+	uint8_t cp_freerun = i2cRead(0x44, 0xFF);
+	printf_P(PSTR("CP Freerun: %s\n"), cp_freerun  & 0x10 ? "true" : "false");
 }
 
 const char cmdBlankUsage[] PROGMEM = "";
@@ -503,7 +531,9 @@ const char cmdGetStatusUsage[] PROGMEM = "Get Status:  GS";
 const char cmdGetStackUsage[] PROGMEM  = "Get Stack:   GZ";
 const char cmdRstAllUsage[] PROGMEM    = "Rst All:     R";
 
-const char cmdColinSetColorUsage[] PROGMEM = "C Set Color: CC red green blue";
+const char cmdColinSetColorUsage[] PROGMEM = "C Set Freerun Color: CC red green blue";
+const char cmdColinFreeRunUsage[] PROGMEM  = "C Enter Freerun:     CF";
+const char cmdColinGetDiagUsage[] PROGMEM  = "C Get Dianostics:    CD";
 
 void dmaRead(uint8_t section, uint16_t src, uint16_t dst, uint16_t len)
 {
@@ -568,6 +598,8 @@ int main()
 		{ "R",  cmdRstAll,    cmdRstAllUsage    },
 
 		{ "CC", cmdColinSetColor, cmdColinSetColorUsage },
+		{ "CF", cmdColinFreeRun,  cmdColinFreeRunUsage },
+		{ "CD", cmdColinGetDiag,  cmdColinGetDiagUsage }
 	};
 
 	int i;
@@ -590,6 +622,8 @@ int main()
 #endif
 
 	sei();
+
+	printf_P(PSTR("Startup\n"));
 
 	while (1)
 	{

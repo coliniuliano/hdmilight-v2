@@ -154,3 +154,5 @@ void cmdGetFormat(uint8_t argc, char** argv);
 
 void cmdGetStack(uint8_t argc, char** argv);
 
+// Colin diagnostic commands
+void cmdColinFreeRun(uint8_t argc, char** argv);

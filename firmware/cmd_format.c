@@ -76,6 +76,10 @@ uint16_t getConfig(uint16_t width, uint16_t height, uint16_t ratio)
 	do
 	{
 		dmaRead(0, offset, (uint16_t)&config, sizeof(config));
+		if(config.width == 0xFF && config.height == 0xFF) {
+			printf_P(PSTR("SPI flash appears empty\n"));
+			return 0xFFFF;
+		}
 		if(config.width  >= width  - X_RES_FUZZ && config.width  <= width  + X_RES_FUZZ && 
 		   config.height >= height - Y_RES_FUZZ && config.height <= height + Y_RES_FUZZ &&
 		   config.ratio == ratio)
@@ -84,8 +88,8 @@ uint16_t getConfig(uint16_t width, uint16_t height, uint16_t ratio)
 		}
 
 		offset += sizeof(config);
-		
-	} while(config.width != 0);
+	// Offset can roll over when SPI flash is empty (filled with 0xFF)
+	} while(config.width != 0 && offset > 0);
 
 	return 0xffff;
 }
@@ -139,7 +143,7 @@ void changeFormat()
 		// area has left the bounding box of the current ratio
 		// so return to the native ratio for the current resolution
 
-		//printf_P(PSTR("reset: %d %d %d   %d %d %d\n"), format->xSize, format->xPreActive, format->xPostActive, format->ySize, format->yPreActive, format->yPostActive);
+		printf_P(PSTR("reset: %d %d %d   %d %d %d\n"), format->xSize, format->xPreActive, format->xPostActive, format->ySize, format->yPreActive, format->yPostActive);
 		g_currentRatio   = 0;
 		g_currentWidth   = format->xSize;
 		g_currentHeight  = format->ySize;
@@ -185,8 +189,8 @@ void changeFormat()
 	{
 		uint32_t config;
 
-		//printf_P(PSTR("format changed: %dx%d (%d): "), g_currentWidth, g_currentHeight, g_currentRatio);
-		//printf_P(PSTR("%s\n"), g_ratios[g_currentRatio].name);
+		printf_P(PSTR("format changed: %dx%d (%d): "), g_currentWidth, g_currentHeight, g_currentRatio);
+		printf_P(PSTR("%s\n"), g_ratios[g_currentRatio].name);
 			
 		config = getConfig(g_currentWidth, g_currentHeight, g_currentRatio);
 		if(config != 0xffff && g_formatChangeEnabled)

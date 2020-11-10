@@ -130,10 +130,13 @@ void writeConfig(const struct ConfigTable* table)
 
 void cmdRstI2C(uint8_t argc, char** argv)
 {
-	/*
 	writeConfig(g_configTablePreEdid);
 	writeEdid(g_edid, sizeof(g_edid));
 	writeConfig(g_configTablePostEdid);
-	*/
+}
+
+// Colin Diagnostic commands
+void cmdColinFreeRun(uint8_t argc, char** argv)
+{
 	writeConfig(g_configTableFreeRun);
 }
